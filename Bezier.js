@@ -14,6 +14,12 @@ const P3cf = t => {
     return t * t * t
 }
 
+const resize = e => {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    draw()
+}
+
 const P0 = {
     name: 'P0',
     x: 100,
@@ -96,10 +102,8 @@ canvas.addEventListener('mousedown', e => {
     isDragging = true
     let x = e.offsetX
     let y = e.offsetY
-    console.log(x, y)
     for (let p of POINTS) {
         if (isOverThePoint(p, x, y)) {
-            console.log("found dragging point: ", p.name)
             draggingPoint = p
             return
         }
@@ -112,7 +116,7 @@ canvas.addEventListener('mouseup', e => {
 })
 
 canvas.addEventListener('mousemove', e => {
-    if (!isDragging) {
+    if (!isDragging || draggingPoint === undefined) {
         return
     }
     draggingPoint.x = e.offsetX
@@ -124,5 +128,8 @@ canvas.addEventListener('mousemove', e => {
 function isOverThePoint(p, x, y) {
     return x < p.x + 2 * p.r && x > p.x - 2 * p.r && y > p.y - 2 * p.r && y < p.y + 2 * p.r
 }
+
+window.addEventListener('resize', resize)
+resize()
 
 draw()
